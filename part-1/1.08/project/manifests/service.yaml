@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gin-svc
+spec:
+  selector:
+    app: gin
+  ports:
+    - protocol: TCP
+      port: 2345
+      targetPort: 9999
+  type: ClusterIP
+  
