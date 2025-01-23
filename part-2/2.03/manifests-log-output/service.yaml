@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hashgenerator
+  namespace: exercises
+spec:
+  selector:
+    app: hashgenerator
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+  

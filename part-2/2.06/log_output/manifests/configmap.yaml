@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: log-output-cfg
+  namespace: exercises
+data:
+  # kv format
+  MESSAGE: "hello world"
+  information.txt: |
+    this text is from file

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ping-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ping
+  template:
+    metadata:
+      labels:
+        app: ping
+    spec:
+      containers:
+        - name: ping
+          image: zhubao/ping-0.1:latest
+          imagePullPolicy: Always
+

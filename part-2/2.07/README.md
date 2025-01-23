@@ -1,0 +1,2 @@
+first run `run.sh` in db folder to create postgres statefulset,
+then run `run.sh` in pingpong to create application, it will store `num` into postgres every time it's visited. visit `http:localhost:8081/pingpong`

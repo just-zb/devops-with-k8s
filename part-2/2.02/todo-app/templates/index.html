@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .title }}</title>
+</head>
+<body>
+<p>{{ .message }}</p>
+<img src="{{ .image }}" alt="Dynamic Image" style="max-width: 100%; height: auto;">
+<form id="todo-form">
+    <input type="text" id="todo-input" maxlength="140" placeholder="Add a new todo" required>
+    <button type="submit">submit</button>
+</form>
+<ul id="todo-list">
+</ul>
+<script>
+    const todoList = document.getElementById("todo-list");
+    const todoForm = document.getElementById("todo-form");
+    const todoInput = document.getElementById("todo-input");
+
+    async function fetchTodos() {
+        try {
+            const response = await fetch("http://todo-backend.localtest.me:8081/todos");
+            if (!response.ok) {
+                throw new Error("Failed to fetch todos");
+            }
+            const todos = await response.json();
+
+            // 清空现有列表
+            todoList.innerHTML = "";
+
+            // 渲染每个 todo
+            for (const [todo, done] of Object.entries(todos)) {
+                const li = document.createElement("li");
+                li.textContent = `${todo} - ${done ? "Done" : "Not Done"}`;
+                todoList.appendChild(li);
+            }
+        } catch (error) {
+            console.error("Error fetching todos:", error);
+        }
+    }
+    todoForm.addEventListener("submit", async (event) => {
+        event.preventDefault(); // 阻止表单默认提交
+
+        const newTodo = todoInput.value.trim();
+        if (!newTodo) return;
+
+        try {
+            const response = await fetch("http://todo-backend.localtest.me:8081/todos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ todo: newTodo, done: false }),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to add todo");
+            }
+
+            // 清空输入框并刷新列表
+            todoInput.value = "";
+            fetchTodos();
+        } catch (error) {
+            console.error("Error adding todo:", error);
+        }
+    });
+
+    // 初始加载 Todo 列表
+    fetchTodos();
+</script>
+</body>
+</html>

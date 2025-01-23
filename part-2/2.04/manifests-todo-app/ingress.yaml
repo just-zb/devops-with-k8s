@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: todo-app-ing
+  namespace: project
+spec:
+  rules:
+    - host: todo-app.localtest.me
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: todo-app-svc
+                port:
+                  number: 80

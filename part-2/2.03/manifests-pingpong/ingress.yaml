@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hashgenerator
+  namespace: exercises
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /pingpong
+            pathType: Prefix
+            backend:
+              service:
+                name: ping
+                port:
+                  number: 80
+          - path: /log-output
+            pathType: Prefix
+            backend:
+              service:
+                name: hashgenerator
+                port:
+                  number: 80
+
