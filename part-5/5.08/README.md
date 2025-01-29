@@ -1,0 +1,11 @@
+- Knative – Used to deploy serverless applications in k3d/k3s.
+- Prometheus – Installed using HELM for monitoring.
+- Golang – Used for backend development with the Gin framework.
+- PostgreSQL – Deployed in Kubernetes (explored using PVC/PV for persistence).
+- Google Kubernetes Engine to deploy and manage containerized applications
+outside of the course:
+- kafka to process real-time data streams
+- Apache Hadoop store and process large volumes of data in a distributed manner
+- Apache Spark real-time data processing
+- redis  cache frequently accessed data, reduce database load and implement session storage. 
+- mysql as a backend database for applications, storing structured data
