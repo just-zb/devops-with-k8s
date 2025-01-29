@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend-dep
+  namespace: project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-backend
+  # setup create strategy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+
+      containers:
+        - name: todo-backend
+          image: image
+          envFrom:
+            - configMapRef:
+                name: postgres-cfg
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: "/healthz"
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: "/healthz"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+

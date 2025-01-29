@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: log-output-dep
+  namespace: exercises
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      labels:
+        app: log-output
+    spec:
+      volumes:
+        - name: configmap
+          configMap:
+            name: log-output-cfg
+            items:
+              - key: information.txt
+                path: information.txt
+      containers:
+        - name: log-output
+          image: zhubao/log-output:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: configmap
+              mountPath: /config
+              readOnly: true
+          envFrom:
+            - configMapRef:
+                name: log-output-cfg
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+            initialDelaySeconds: 5
+            periodSeconds: 5
