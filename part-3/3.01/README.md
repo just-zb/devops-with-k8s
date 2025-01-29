@@ -1,0 +1,1 @@
+start postgres and start pingpong, notice that to avoid arch problems, using `docker buildx ...` to create `linux/amd64` arch image in `run.sh`(my computer's os is arm), so that gcloud node can pull the image. 

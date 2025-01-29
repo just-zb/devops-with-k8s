@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: postgres-backup
+              image: google/cloud-sdk:alpine
+              imagePullPolicy: IfNotPresent
+              volumeMounts:
+                - mountPath: /usr/src/app
+                  name: gcloud-service-account-vo
+              envFrom:
+                - secretRef:
+                    name: postgres-basic-auth
+              command:
+                - /bin/sh
+                - -c
+                - gcloud auth activate-service-account --key-file="$GCS_KEYFILE"
+                - pg_dump -v $URL | gzip > "$BACKUP_FILE"
+                - gsutil cp "$BACKUP_FILE" gs://"$GCS_BUCKET"/
+          restartPolicy: OnFailure
+          volumes:
+            - name: gcloud-service-account-vo
+              secret:
+                secretName: gcloud-service-account

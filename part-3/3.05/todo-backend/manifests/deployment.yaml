@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend-dep
+  namespace: project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-backend
+  # setup create strategy
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+
+      containers:
+        - name: todo-backend
+          image: image
+          envFrom:
+            - configMapRef:
+                name: postgres-cfg
