@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-stset
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres-svc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      volumes:
+        - name: tmp-volume
+          emptyDir:
+            {}
+      containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgres
+          envFrom:
+            - configMapRef:
+                name: postgres-cfg
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: tmp-volume
+              subPath: postgres
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-svc
+  labels:
+    app: postgres
+spec:
+  clusterIP: None
+  ports:
+    - port: 5432
+      targetPort: 5432
+      name: postgres
+  selector:
+    app: postgres
+
+
+
+
+
+
+

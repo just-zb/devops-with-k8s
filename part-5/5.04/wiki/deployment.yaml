@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wiki-dep
+  labels:
+    app: wiki-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wiki
+  template:
+    metadata:
+      name: wiki
+      labels:
+        app: wiki
+    spec:
+      volumes:
+        - name: share-volume
+          emptyDir:
+            {}
+      containers:
+        - name: wiki-dep
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: share-volume
+          ports:
+            - containerPort: 80
+              protocol: TCP
+        - name: wiki-side
+          image: zhubao/wiki-side:latest
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: share-volume
+      initContainers:
+        - name: wiki-init
+          image: alpine
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: share-volume
+          command:
+            - /bin/sh
+            - -c
+            - apk add --no-cache wget && wget -O /usr/share/nginx/html/k8s.html https://en.wikipedia.org/wiki/Kubernetes
+      restartPolicy: Always
+      

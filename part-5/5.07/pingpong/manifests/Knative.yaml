@@ -1,0 +1,14 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: pingpong
+spec:
+  template:
+    spec:
+      containers:
+        - image: zhubao/pingpong:latest
+          ports:
+            - containerPort: 9999
+          envFrom:
+            - configMapRef:
+                name: postgres-cfg

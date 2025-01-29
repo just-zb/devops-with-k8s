@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: job-env
+data:
+  # kv format
+  BACKUP_FILE: "/usr/src/app/backup-$(date +%Y-%m-%d_%H-%M-%S).sql.gz"
+  GCS_BUCKET: "todo-backend"
+  GCS_KEYFILE: "/usr/src/app/service-account-key.json"

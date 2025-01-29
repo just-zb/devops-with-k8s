@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pingpong-dep
+  namespace: exercises
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pingpong
+  template:
+    metadata:
+      labels:
+        app: pingpong
+    spec:
+      containers:
+        - name: pingpong
+          image: zhubao/pingpong:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9999
+          envFrom:
+            - configMapRef:
+                name: postgres-cfg
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /healthz
+            initialDelaySeconds: 5
+            periodSeconds: 5
+

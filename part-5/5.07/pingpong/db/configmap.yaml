@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: postgres-cfg
+data:
+    # kv format
+    POSTGRES_PASSWORD: password
+    POSTGRES_USER: myuser
+    POSTGRES_DB: mydb
+    POSTGRES_HOST: postgres-svc
